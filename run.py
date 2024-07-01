@@ -82,7 +82,7 @@ def run(cyto_job, parameters):
 
     # Paths where ONNX and OpenVINO IR models will be stored.
     # ir_path = weights_path.with_suffix(".xml")
-    ir_path = "/models/pc-cb-3class_dn21adam_best_model_100ep.xml"
+    ir_path = "/models/pdac-3class_dn21adam_best_model_100ep.xml"
 
     # Instantiate OpenVINO Core
     core = ov.Core()
