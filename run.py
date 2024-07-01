@@ -36,7 +36,6 @@ from torchvision.models import DenseNet
 import openvino as ov
 
 from PIL import Image
-from skimage import io, color, filters
 
 # import matplotlib.pyplot as plt
 import time
