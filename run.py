@@ -31,8 +31,6 @@ from cytomine import Cytomine, models, CytomineJob
 from cytomine.models import Annotation, AnnotationTerm, AnnotationCollection, ImageInstanceCollection, Job, User, JobData, Project, ImageInstance, Property
 from cytomine.models.ontology import Ontology, OntologyCollection, Term, RelationTerm, TermCollection
 
-from csbdeep.utils import Path, normalize
-
 import torch
 from torchvision.models import DenseNet
 import openvino as ov
