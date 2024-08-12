@@ -1,6 +1,6 @@
 {
   "name": "S_PDAC_3class",
-  "description": "Classification of PDAC biopsy into stroma, tumor front and tumor center regions",
+  "description": "Classification of PDAC biopsy into stroma, tumor and inflammatory",
   "container-image": {
     "image": "mizjaggy18/s_pdac_3class",
     "type": "singularity"
@@ -95,8 +95,8 @@
       "id": "cytomine_id_c1_term",
       "value-key": "[@ID]",
       "command-line-flag": "--@id",
-      "name": "Cytomine class1 (Tumor Center) cell term ID",
-      "description": "Ontology term ID for the cells that will be classified as Class 1 (Tumor Center)",
+      "name": "Cytomine class1 (Tumor) cell term ID",
+      "description": "Ontology term ID for the cells that will be classified as Class 1 (Tumor)",
       "optional": false,
       "type": "Domain",
       "uri": "/api/ontology/$currentOntology$/term.json",
@@ -108,8 +108,8 @@
       "id": "cytomine_id_c2_term",
       "value-key": "[@ID]",
       "command-line-flag": "--@id",
-      "name": "Cytomine class2 (Tumor Front) cell term ID",
-      "description": "Ontology term ID for the cells that will be classified as Class 2 (Tumor Front)",
+      "name": "Cytomine class2 (Inflammatory) cell term ID",
+      "description": "Ontology term ID for the cells that will be classified as Class 2 (Inflammatory)",
       "optional": false,
       "type": "Domain",
       "uri": "/api/ontology/$currentOntology$/term.json",
