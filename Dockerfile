@@ -40,10 +40,10 @@ RUN pip install tqdm
 # RUN pip install shapely
 
 RUN mkdir -p /models 
-ADD /models/pdac-3class_dn21adam_best_model_100ep.bin /models/pdac-3class_dn21adam_best_model_100ep.bin
-ADD /models/pdac-3class_dn21adam_best_model_100ep.xml /models/pdac-3class_dn21adam_best_model_100ep.xml
-RUN chmod 444 /models/pdac-3class_dn21adam_best_model_100ep.bin
-RUN chmod 444 /models/pdac-3class_dn21adam_best_model_100ep.xml
+ADD /models/pdac-validated_dn21adam_best_model_100ep.bin /models/pdac-validated_dn21adam_best_model_100ep.bin
+ADD /models/pdac-validated_dn21adam_best_model_100ep.xml /models/pdac-validated_dn21adam_best_model_100ep.xml
+RUN chmod 444 /models/pdac-validated_dn21adam_best_model_100ep.bin
+RUN chmod 444 /models/pdac-validated_dn21adam_best_model_100ep.xml
 
 #ADD FILES
 RUN mkdir -p /app
