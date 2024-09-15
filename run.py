@@ -77,7 +77,7 @@ def run(cyto_job, parameters):
 
     # Paths where ONNX and OpenVINO IR models will be stored.
     # ir_path = weights_path.with_suffix(".xml")
-    ir_path = "/models/pdac-validated_dn21adam_best_model_100ep.xml"
+    ir_path = "/models/pdac-chosen-v0_dn21adam_best_model_100ep.xml"
 
     # Instantiate OpenVINO Core
     core = ov.Core()
@@ -192,6 +192,8 @@ def run(cyto_job, parameters):
                     # print("Class 1: Tumor")
                     id_terms=parameters.cytomine_id_c2_term
                     pred_c2=pred_c2+1
+                elif pred_labels[0]==3:
+                    continue
                 
                 cytomine_annotations = AnnotationCollection()
                 annotation=roi_geometry
