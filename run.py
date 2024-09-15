@@ -58,7 +58,7 @@ def run(cyto_job, parameters):
     job = cyto_job.job
     user = job.userJob
     project = cyto_job.project
-    num_classes = 3
+    num_classes = 4
 
     terms = TermCollection().fetch_with_filter("project", parameters.cytomine_id_project)
     job.update(status=Job.RUNNING, progress=1, statusComment="Terms collected...")
