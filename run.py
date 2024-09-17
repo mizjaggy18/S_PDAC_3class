@@ -48,11 +48,11 @@ import logging.handlers
 import shutil
 
 __author__ = "WSH Munirah W Ahmad <wshmunirah@gmail.com>"
-__version__ = "1.0.1"
+__version__ = "3.0.1"
 # Stardist (from Cytomine) followed by Tensorflow classification for Pancreatic Cancer (Date created: 9 Jan 2024)
 
 def run(cyto_job, parameters):
-    logging.info("----- PC-Stardist-class-DenseNet with OpenVino v%s -----", __version__)
+    logging.info("----- PDAC-class-DenseNet with OpenVino v%s -----", __version__)
     logging.info("Entering run(cyto_job=%s, parameters=%s)", cyto_job, parameters)
 
     job = cyto_job.job
@@ -67,14 +67,6 @@ def run(cyto_job, parameters):
     start_time=time.time()
 
     # ----- load network ----
-    # modelname = "/models/pc-cb-2class.h5"
-    # print("Model name: ", modelname)
-    # model = tf.keras.models.load_model(modelname, compile=False) 
-    # model.compile(optimizer='adam',
-    #           loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-    #           metrics=['accuracy'])
-    # model.summary()
-
     # Paths where ONNX and OpenVINO IR models will be stored.
     # ir_path = weights_path.with_suffix(".xml")
     ir_path = "/models/pdac-chosen-v0_dn21adam_best_model_100ep.xml"
