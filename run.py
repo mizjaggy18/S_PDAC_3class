@@ -173,15 +173,16 @@ def run(cyto_job, parameters):
                 pred_all.append(pred_labels)
 
                 if pred_labels[0]==0:
-                    # print("Class 0: Normal")
-                    id_terms=parameters.cytomine_id_c0_term
-                    pred_c0=pred_c0+1
+                    # print("Class 0: Stroma/Epithelium")
+                    # id_terms=parameters.cytomine_id_c0_term
+                    # pred_c0=pred_c0+1
+                    continue
                 elif pred_labels[0]==1:
                     # print("Class 1: Tumor")
                     id_terms=parameters.cytomine_id_c1_term
                     pred_c1=pred_c1+1
                 elif pred_labels[0]==2:
-                    # print("Class 1: Tumor")
+                    # print("Class 2: Inflammatory")
                     id_terms=parameters.cytomine_id_c2_term
                     pred_c2=pred_c2+1
                 elif pred_labels[0]==3:
