@@ -40,10 +40,15 @@ RUN pip install tqdm
 # RUN pip install shapely
 
 RUN mkdir -p /models 
-ADD /models/pdac-chosen-v3_dn21adam_best_model_100ep.bin /models/pdac-chosen-v3_dn21adam_best_model_100ep.bin
-ADD /models/pdac-chosen-v3_dn21adam_best_model_100ep.xml /models/pdac-chosen-v3_dn21adam_best_model_100ep.xml
-RUN chmod 444 /models/pdac-chosen-v3_dn21adam_best_model_100ep.bin
-RUN chmod 444 /models/pdac-chosen-v3_dn21adam_best_model_100ep.xml
+ADD /models/pdac-chosen-v3_norm_dn21adam_best_model_100ep.bin /models/pdac-chosen-v3_norm_dn21adam_best_model_100ep.bin
+ADD /models/pdac-chosen-v3_norm_dn21adam_best_model_100ep.xml /models/pdac-chosen-v3_norm_dn21adam_best_model_100ep.xml
+RUN chmod 444 /models/pdac-chosen-v3_norm_dn21adam_best_model_100ep.bin
+RUN chmod 444 /models/pdac-chosen-v3_norm_dn21adam_best_model_100ep.xml
+
+# ADD /models/pdac-chosen-v3_norm_fm_convnext_best_model_100ep.bin /models/pdac-chosen-v3_norm_fm_convnext_best_model_100ep.bin
+ADD /models/pdac-chosen-v3_norm_fm_convnext_best_model_100ep.xml /models/pdac-chosen-v3_norm_fm_convnext_best_model_100ep.xml
+# RUN chmod 444 /models/pdac-chosen-v3_norm_fm_convnext_best_model_100ep.bin
+RUN chmod 444 /models/pdac-chosen-v3_norm_fm_convnext_best_model_100ep.xml
 
 #ADD FILES
 RUN mkdir -p /app
