@@ -5,7 +5,7 @@
     "image": "mizjaggy18/s_pdac_3class",
     "type": "singularity"
   },
-  "command-line": "echo [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE] [CYTOMINE_ID_IMAGES] [CYTOMINE_ID_ROI_TERM] [CYTOMINE_ID_C0_TERM] [CYTOMINE_ID_C1_TERM] [CYTOMINE_ID_C2_TERM] [LOG_LEVEL]",
+  "command-line": "echo [CYTOMINE_HOST] [CYTOMINE_PUBLIC_KEY] [CYTOMINE_PRIVATE_KEY] [CYTOMINE_ID_PROJECT] [CYTOMINE_ID_SOFTWARE] [CYTOMINE_ID_IMAGES] [CYTOMINE_ID_ROI_TERM] [CYTOMINE_ID_C0_TERM] [CYTOMINE_ID_C1_TERM] [CYTOMINE_ID_C2_TERM] [LOG_LEVEL] [MODELTYPE]",
   "inputs": [
     {
       "id": "cytomine_host",
@@ -127,6 +127,17 @@
       "optional": true,
       "type": "String",
       "default-value": "WARNING"
+    },
+    {
+      "id": "modeltype",
+      "value-key": "[@ID]",
+      "command-line-flag": "--@id",
+      "name": "DenseNet21 model or FM model",
+      "description": "1: DenseNet21, 2: FM-ConvNext",
+      "default-value": 1,
+      "set-by-server": false,
+      "optional": false,
+      "type": "Number"
     }
   ],
 
