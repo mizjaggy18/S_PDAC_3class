@@ -59,6 +59,7 @@ def run(cyto_job, parameters):
     user = job.userJob
     project = cyto_job.project
     num_classes = 4
+    modeltype = parameters.modeltype
 
     terms = TermCollection().fetch_with_filter("project", parameters.cytomine_id_project)
     job.update(status=Job.RUNNING, progress=1, statusComment="Terms collected...")
@@ -69,7 +70,10 @@ def run(cyto_job, parameters):
     # ----- load network ----
     # Paths where ONNX and OpenVINO IR models will be stored.
     # ir_path = weights_path.with_suffix(".xml")
-    ir_path = "/models/pdac-chosen-v3_dn21adam_best_model_100ep.xml"
+    if modeltype==1:
+        ir_path = "/models/pdac-chosen-v3_norm_dn21adam_best_model_100ep.xml"
+    elif modeltype==2:
+        ir_path = "/models/pdac-chosen-v3_norm_fm_convnext_best_model_100ep.xml"
 
     # Instantiate OpenVINO Core
     core = ov.Core()
@@ -151,55 +155,65 @@ def run(cyto_job, parameters):
                         gc.collect()
                         print("i==", inc)
 
-                roi_geometry = wkt.loads(roi.location)
-
-                # print("----------------------------Cells------------------------------")
-                #Dump ROI image into local PNG file
-                roi_path=os.path.join(working_path,str(roi_annotations.project)+'/'+str(roi_annotations.image)+'/')
-                roi_png_filename=os.path.join(roi_path+str(roi.id)+'.png')
-
-                is_algo = User().fetch(roi.user).algo
-                roi.dump(dest_pattern=roi_png_filename,mask=True,alpha=not is_algo)                
-                
-                im = cv2.cvtColor(cv2.imread(roi_png_filename),cv2.COLOR_BGR2RGB)
-                im = cv2.resize(im,(224,224))
-                arr_out = im.reshape(-1,224,224,3)
-                output = np.zeros((0,num_classes))
-                arr_out = torch.from_numpy(arr_out.transpose(0, 3, 1, 2))                
-                output_batch = compiled_model([arr_out])[output_layer]
-                output = np.append(output, output_batch, axis=0)
-                pred_labels = np.argmax(output, axis=1)
-                # pred_labels=[pred_labels]
-                pred_all.append(pred_labels)
-
-                if pred_labels[0]==0:
-                    # print("Class 0: Stroma/Epithelium")
-                    # id_terms=parameters.cytomine_id_c0_term
-                    # pred_c0=pred_c0+1
-                    continue
-                elif pred_labels[0]==1:
-                    # print("Class 1: Tumor")
-                    id_terms=parameters.cytomine_id_c1_term
-                    pred_c1=pred_c1+1
-                elif pred_labels[0]==2:
-                    # print("Class 2: Inflammatory")
-                    id_terms=parameters.cytomine_id_c2_term
-                    pred_c2=pred_c2+1
-                elif pred_labels[0]==3:
-                    continue
-                
-                cytomine_annotations = AnnotationCollection()
-                annotation=roi_geometry
-                
-                cytomine_annotations.append(Annotation(location=annotation.wkt,#location=roi_geometry,
-                                                       id_image=id_image,#conn.parameters.cytomine_id_image,
-                                                       id_project=project.id,
-                                                       id_terms=[id_terms]))
-                print(".",end = '',flush=True)
-
-
-                #Send Annotation Collection (for this ROI) to Cytomine server in one http request
-                ca = cytomine_annotations.save()
+                try:
+                    roi_geometry = wkt.loads(roi.location)
+    
+                    # print("----------------------------Cells------------------------------")
+                    #Dump ROI image into local PNG file
+                    roi_path=os.path.join(working_path,str(roi_annotations.project)+'/'+str(roi_annotations.image)+'/')
+                    roi_png_filename=os.path.join(roi_path+str(roi.id)+'.png')
+    
+                    is_algo = User().fetch(roi.user).algo
+                    roi.dump(dest_pattern=roi_png_filename,mask=True,alpha=not is_algo)              
+                    
+                    # Convert the image to float32 for normalization
+                    im = cv2.cvtColor(cv2.imread(roi_png_filename),cv2.COLOR_BGR2RGB)
+                    im = cv2.resize(im,(224,224))
+                    im = im.astype(np.float32) / 255.0
+                    mean = np.array([0.4914, 0.4822, 0.4465])
+                    std = np.array([0.2023, 0.1994, 0.2010])
+                    im = (im - mean) / std
+                    arr_out = im.reshape(-1,224,224,3)   
+                    
+                    output = np.zeros((0,num_classes))
+                    arr_out = torch.from_numpy(arr_out.transpose(0, 3, 1, 2))                
+                    output_batch = compiled_model([arr_out])[output_layer]
+                    output = np.append(output, output_batch, axis=0)
+                    pred_labels = np.argmax(output, axis=1)
+                    # pred_labels=[pred_labels]
+                    pred_all.append(pred_labels)
+    
+                    if pred_labels[0]==0:
+                        # print("Class 0: Stroma/Epithelium")
+                        # id_terms=parameters.cytomine_id_c0_term
+                        # pred_c0=pred_c0+1
+                        continue
+                    elif pred_labels[0]==1:
+                        # print("Class 1: Tumor")
+                        id_terms=parameters.cytomine_id_c1_term
+                        pred_c1=pred_c1+1
+                    elif pred_labels[0]==2:
+                        # print("Class 2: Inflammatory")
+                        id_terms=parameters.cytomine_id_c2_term
+                        pred_c2=pred_c2+1
+                    elif pred_labels[0]==3:
+                        continue
+                    
+                    cytomine_annotations = AnnotationCollection()
+                    annotation=roi_geometry
+                    
+                    cytomine_annotations.append(Annotation(location=annotation.wkt,#location=roi_geometry,
+                                                           id_image=id_image,#conn.parameters.cytomine_id_image,
+                                                           id_project=project.id,
+                                                           id_terms=[id_terms]))
+                    print(".",end = '',flush=True)
+    
+    
+                    #Send Annotation Collection (for this ROI) to Cytomine server in one http request
+                    ca = cytomine_annotations.save()
+                    
+                except:
+                    print("An exception occurred. Proceed with next annotations.")
 
             end_prediction_time=time.time()
 
